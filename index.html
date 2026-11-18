@@ -1,0 +1,1150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#020409">
+<meta property="og:title" content="for Giana">
+<meta property="og:description" content="something I made for you">
+<style>[hidden]{display:none!important} :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>For Giana</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the HP bloom engine full screen; a quiet start card; the letter floats over the sky (left column on wide screens). */
+:root {
+  --night: #020409;
+  --rim: #2a2f45;
+  --ink: #f7ecf2;
+  --muted: #a8a1c4;
+  --rose: #ff6bb0;
+  --gold: #ffd479;
+  --mint: #9fe3b5;
+  --remark: #77719a;
+  --display: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
+  --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); font-family: var(--mono);
+  background: radial-gradient(120% 90% at 50% 100%, #07101c 0%, #020409 55%, #000 100%) var(--night);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+canvas { position: fixed; inset: 0; display: block; }
+
+#intro {
+  position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; text-align: center;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  transition: opacity 3.2s ease;
+}
+#intro.gone { opacity: 0; pointer-events: none; }
+.card { width: min(560px, 100%); background: #0e0d22; border: 1px solid var(--rim); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 60px rgba(255, 107, 176, .08); display: flex; flex-direction: column; text-align: left; }
+.bar { display: flex; gap: 6px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--rim); }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+.dot:nth-child(2) { background: #febc2e; } .dot:nth-child(3) { background: #28c840; }
+.file { margin-left: 8px; color: var(--muted); font-size: 12px; }
+#term { margin: 0; padding: 14px 16px; height: min(52vh, 420px); overflow: auto; font: 12px/1.55 var(--mono); white-space: pre-wrap; word-break: break-word; color: var(--ink); }
+#term.love { display: grid; place-items: center; overflow: hidden; }
+.typed { font: 700 clamp(3rem, 14vw, 4.6rem)/1 var(--display); color: var(--rose); text-shadow: 0 0 26px rgba(255, 107, 176, .5); white-space: nowrap; }
+.cursor { display: inline-block; width: .08em; height: .9em; margin-left: .06em; background: var(--rose); vertical-align: -.08em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.ok { color: var(--mint); } .warn { color: var(--rose); }
+.startwrap { position: relative; margin: 0 16px 16px; align-self: flex-start; }
+.start { display: grid; gap: 18px; justify-items: center; }
+.for { font: 500 clamp(2.6rem, 11vw, 4.2rem)/1 var(--display); margin: 0; }
+.for b { color: var(--rose); font-weight: 700; }
+.made { margin: 0; font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+button {
+  font: 500 14px var(--mono); border-radius: 999px; padding: 12px 22px; cursor: pointer;
+  border: 1px solid var(--rim); background: rgba(12, 14, 26, .75); color: var(--ink);
+}
+button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+#begin { background: var(--rose); color: #1d0b15; border-color: var(--rose); padding: 12px 26px; }
+
+#letter {
+  position: fixed; left: 0; right: 0; z-index: 3; text-align: center; pointer-events: none;
+  top: calc(env(safe-area-inset-top, 0px) + 5vh); padding-inline: 16px;
+}
+#letter p { margin: 0 auto; max-width: min(30ch, calc(100vw - 32px)); text-shadow: 0 2px 14px rgba(0, 0, 0, .85), 0 0 4px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(10px); transition: opacity 1.8s ease, transform 1.8s ease; text-wrap: balance; }
+#letter p.on { opacity: 1; transform: none; }
+.big { font: 500 clamp(2rem, 8vw, 3.2rem)/1.05 var(--display); }
+.name { font: 700 clamp(3.4rem, 15vw, 5.6rem)/1 var(--display); color: var(--rose); text-shadow: 0 0 26px rgba(255, 107, 176, .55), 0 2px 14px rgba(0, 0, 0, .8) !important; }
+.line { font: 500 clamp(1.25rem, 5.2vw, 2rem)/1.2 var(--display); margin-top: 4px !important; }
+.sign { font: 700 clamp(1.4rem, 5.6vw, 2rem)/1.2 var(--display); color: var(--gold); margin-top: 8px !important; }
+@media (min-aspect-ratio: 1/1) {
+  #letter { right: auto; width: 42vw; left: 5vw; top: 50%; transform: translateY(-50%); text-align: left; }
+  #letter p { margin: 0; max-width: 24ch; }
+  .big { font-size: clamp(2rem, 4vw, 3.4rem); }
+  .name { font-size: clamp(3.4rem, 8vw, 6.4rem); }
+  .line, .sign { font-size: clamp(1.4rem, 2.6vw, 2.2rem); }
+}
+
+#controls {
+  position: fixed; left: 0; right: 0; z-index: 4; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  opacity: 0; pointer-events: none; transition: opacity 1.4s ease;
+}
+#controls.on { opacity: 1; pointer-events: auto; }
+
+#source {
+  position: fixed; inset: 0; z-index: 20; background: rgba(4, 5, 12, .97); display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 12px) max(16px, env(safe-area-inset-left, 0px));
+}
+.srcbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--rim); color: var(--muted); font-size: 12px; }
+#srcpre { flex: 1; min-width: 0; margin: 0; padding-top: 12px; overflow: auto; font: 12px/1.55 var(--mono); white-space: pre; }
+.k { color: var(--rose); } .n { color: var(--gold); } .s { color: var(--mint); } .c { color: var(--remark); font-style: italic; }
+@media (prefers-reduced-motion: reduce) { #intro, #letter p, #controls { transition: none !important; } }
+</style>
+</head>
+<body>
+
+
+<main id="intro">
+  <div id="card" class="card">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="file">giana.js</span></div>
+<pre id="term">$ cat note.txt
+
+hey giana.
+i made you something.
+it's not a picture, it's code.
+every flower, every petal, every leaf
+gets drawn live by the script you're about to see.
+
+turn your sound on, then press start.</pre>
+    <div class="startwrap"><button id="begin" type="button">&#9654; start</button></div>
+  </div>
+</main>
+
+<div id="letter" aria-live="polite">
+  <p class="big" data-at="36">I'll always love you,</p>
+  <p class="name" data-at="37.4">Giana.</p>
+  <p class="line" data-at="39.6">You've made me the happiest person in the world.</p>
+  <p class="line" data-at="42">I hope you know I always miss you,</p>
+  <p class="line" data-at="44">and I'm so proud of you.</p>
+  <p class="sign" data-at="46.2">&mdash; Hudson</p>
+</div>
+
+<div id="controls">
+  <button id="viewsrc" type="button">view the code</button>
+  <button id="replay" type="button">play again</button>
+</div>
+
+<div id="source" hidden>
+  <div class="srcbar"><span>the code behind this, written for you</span><button id="closesrc" type="button">close</button></div>
+  <pre id="srcpre"></pre>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script id="app">
+// =====================================================================================================
+// FOR GIANA -- from hudson.
+// built on the same engine as my trade-screen bloom: a seed falls out of the sky, a flower grows and
+// opens, the flower lets go into light, and a tree grows where it stood. then it's just us and the dog.
+// =====================================================================================================
+const QP = new URLSearchParams(location.search);
+const rnd = (() => { let s = 1234567; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+// ---------------------------------------------------------------- geometry
+const MAXP = 480000;
+const P_END = new Float32Array(MAXP * 3), P_BUD = new Float32Array(MAXP * 3), P_BASE = new Float32Array(MAXP * 3);
+const COL = new Float32Array(MAXP * 3), META = new Float32Array(MAXP * 4), ALPHA = new Float32Array(MAXP);
+let n = 0;
+function put(end, bud, base, c, grow, openable, kind, a) {
+  if (n >= MAXP) return; const i3 = n * 3, i4 = n * 4;
+  P_END[i3] = end[0]; P_END[i3 + 1] = end[1]; P_END[i3 + 2] = end[2];
+  P_BUD[i3] = bud[0]; P_BUD[i3 + 1] = bud[1]; P_BUD[i3 + 2] = bud[2];
+  P_BASE[i3] = base[0]; P_BASE[i3 + 1] = base[1]; P_BASE[i3 + 2] = base[2];
+  COL[i3] = c[0] / 255; COL[i3 + 1] = c[1] / 255; COL[i3 + 2] = c[2] / 255;
+  META[i4] = grow; META[i4 + 1] = openable; META[i4 + 2] = rnd(); META[i4 + 3] = kind; ALPHA[n] = a; n++;
+}
+const mixc = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+const add = (a, b, k = 1) => [a[0] + b[0] * k, a[1] + b[1] * k, a[2] + b[2] * k];
+const nrm = v => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const jit = s => [(rnd() - .5) * s, (rnd() - .5) * s, (rnd() - .5) * s];
+
+const Y0 = -1.18, Y1 = 0.30;                         // ground .. receptacle (flower head)
+const stemC = s => [0.075 * Math.sin(s * 3.1) - 0.02 * s, Y0 + s * (Y1 - Y0), 0.035 * Math.sin(s * 2.2 + .6)];
+const HEAD = stemC(1);
+
+// 1) stem: a living green tube that rises from the ground
+for (let k = 0; k < 42000; k++) {
+  const s = Math.pow(rnd(), .9), a = rnd() * 6.283, r = lerp(.032, .02, s) * (k % 7 === 0 ? .4 : 1);
+  const c = stemC(s), p = [c[0] + Math.cos(a) * r, c[1], c[2] + Math.sin(a) * r];
+  const rim = Math.pow(Math.abs(Math.cos(a)), 3);
+  const col = mixc([28, 96, 52], [120, 228, 140], .25 + .55 * s + .3 * rim);
+  const base = stemC(Math.max(0, s - .06)); put(p, p, [base[0], base[1], base[2]], col, s * .42, 0, 0, .55 + .35 * rim);
+}
+// 2) leaves: unfurl from the stem, midrib + side veins
+function leaf(sAt, phi, L, W, count) {
+  const at = stemC(sAt), d = nrm([Math.cos(phi), .42, Math.sin(phi)]), ac = nrm([-Math.sin(phi), 0, Math.cos(phi)]), up = nrm(cross(ac, d));
+  for (let k = 0; k < count; k++) {
+    let u = Math.sqrt(rnd()), v = rnd() * 2 - 1, kindA = .38, col;
+    const r = rnd();
+    if (r < .16) { v = (rnd() - .5) * .05; kindA = .5; }                                    // midrib
+    else if (r < .34) { const j = 1 + Math.floor(rnd() * 6), sgn = rnd() < .5 ? -1 : 1, t = rnd(); u = clamp(j / 7 + t * .18, 0, 1); v = sgn * t * .95; kindA = .45; }   // veins
+    else if (r < .44) { v = rnd() < .5 ? -1 : 1; kindA = .45; }                              // edge
+    const w = W * Math.pow(Math.sin(Math.PI * Math.pow(u, .8)), .9);
+    const droop = -.28 * u * u * L, fold = .32 * Math.abs(v) * w;
+    let p = add(add(add(at, d, u * L), ac, v * w), up, fold); p[1] += droop;
+    const bud = add(add(at, [0, 1, 0], u * L * .45), ac, v * w * .12);
+    col = mixc([26, 92, 48], [110, 210, 110], .3 + .5 * u);
+    if (kindA > .6) col = mixc(col, [190, 250, 160], .45);
+    put(add(p, jit(.004)), add(p, jit(.004)), bud, col, .30 + .12 * u, 0, 1, kindA);
+  }
+}
+leaf(.30, Math.PI + .35, .62, .16, 30000);
+leaf(.52, -.25, .56, .15, 28000);
+leaf(.70, 2.1, .38, .1, 12000);
+// 2b) receptacle: the stem swells into a green cup that the bud sits in (Hudson: "the bud isn't connected")
+for (let k = 0; k < 6000; k++) {
+  const t = rnd(), y = HEAD[1] - .09 + t * .14, r = .02 + .058 * (t * t * (3 - 2 * t)), a = rnd() * 6.283;
+  const p = [HEAD[0] + Math.cos(a) * r, y, HEAD[2] + Math.sin(a) * r];
+  put(p, p, [HEAD[0], HEAD[1] - .09, HEAD[2]], mixc([40, 120, 64], [110, 210, 118], .5 + .4 * t), .5 + .08 * t, 0, 0, .32);
+}
+// 3) sepals: cup the bud, then fold back as it opens
+for (let q = 0; q < 5; q++) {
+  const phi = q * 1.2566 + .3;
+  for (let k = 0; k < 2600; k++) {
+    const u = Math.sqrt(rnd()), v = rnd() * 2 - 1, L = .26, w = .07 * Math.sin(Math.PI * Math.min(1, u * 1.1));
+    const mk = th => { const ax = [Math.sin(th) * Math.cos(phi), Math.cos(th), Math.sin(th) * Math.sin(phi)], t = [-Math.sin(phi), 0, Math.cos(phi)];
+      return add(add(HEAD, ax, u * L), t, v * w); };
+    const end = mk(1.95);
+    const ub = u * .5, ang = phi + v * .42, rr = .135 * 1.1 * (.36 + .64 * Math.pow(Math.sin(Math.PI * Math.min(1, ub * .96)), .78)) + .008;
+    const bud = [HEAD[0] + Math.cos(ang) * rr, HEAD[1] + .02 + ub * .46, HEAD[2] + Math.sin(ang) * rr];
+    put(end, bud, HEAD, mixc([30, 110, 56], [120, 220, 120], u), .52 + .1 * u, 1, 2, .6);
+  }
+}
+// 4) petals: three layers of translucent membrane, rim light + veins, bud -> bloom
+const LAY = [{ P: 7, L: .78, tf: 1.38, tb: .2, off: 0, cnt: 92000 }, { P: 7, L: .66, tf: 1.0, tb: .12, off: .45, cnt: 78000 }, { P: 6, L: .5, tf: .58, tb: .05, off: .2, cnt: 52000 }];
+LAY.forEach((ly, li) => {
+  for (let k = 0; k < ly.cnt; k++) {
+    const q = Math.floor(rnd() * ly.P), phi = (q + ly.off) * 6.2832 / ly.P + li * .22;
+    let u = Math.pow(rnd(), .85), v = rnd() * 2 - 1, a = .15, kind = 3;
+    const r = rnd();
+    if (r < .17) { v = Math.round(v * 4) / 4 + (rnd() - .5) * .03; a = .3; kind = 4; }          // veins
+    else if (r < .29) { v = rnd() < .5 ? -1 : 1; a = .38; kind = 5; }                           // glowing rim
+    const L = ly.L, w = L * .42 * Math.pow(Math.sin(Math.PI * Math.min(1, u * 1.04)), .62) * (.62 + .38 * u);
+    const mk = (th, curl) => {
+      const tt = th + curl * Math.pow(u, 3);
+      const ax = [Math.sin(tt) * Math.cos(phi), Math.cos(tt), Math.sin(tt) * Math.sin(phi)], t = [-Math.sin(phi), 0, Math.cos(phi)], nn = cross(ax, t);
+      const cup = .2 * L * v * v * (.4 + u);
+      return add(add(add([HEAD[0], HEAD[1] + .03, HEAD[2]], ax, u * L), t, v * w), nn, -cup);
+    };
+    const end = add(mk(ly.tf, .35), jit(.006));
+    // BUD (v2, Hudson: "the bud could've been better"): a closed teardrop. Each petal wraps ~1.6x its share
+    // of the circle (overlapping), spirals a little, bulges then closes over the tip; outer layers sit outside.
+    const Lb = .46 * (1 - li * .07), Rb = .135 * (1.12 - li * .1);
+    const bulge = Math.pow(Math.sin(Math.PI * Math.min(1, u * .96)), .78) * (1 - .25 * u);
+    const ang = phi + v * (Math.PI / ly.P) * 1.6 + u * .7;
+    const rr = Rb * (.32 + .68 * bulge) * (1 + .06 * Math.abs(v)) * (1 - .9 * Math.pow(u, 6)) + li * -.006;   // broad base in the cup, closes at the tip
+    const bud = add([HEAD[0] + Math.cos(ang) * rr, HEAD[1] + .03 + u * Lb, HEAD[2] + Math.sin(ang) * rr], jit(.0035));
+    // saturated (Hudson: "a lot of white pixels"): deep magenta base -> hot pink -> violet tips
+    let col = u < .2 ? mixc([110, 10, 80], [210, 30, 120], u / .2)
+            : u < .7 ? mixc([235, 50, 140], [250, 90, 170], (u - .2) / .5)
+            : mixc([250, 90, 170], li === 1 ? [190, 90, 255] : [255, 120, 200], (u - .7) / .3);
+    if (kind === 4) col = mixc(col, [255, 70, 165], .45);             // saturated, so stacking stays pink (not white)
+    if (kind === 5) col = mixc(col, [255, 85, 185], .5);
+    put(end, bud, [HEAD[0], HEAD[1] + .02, HEAD[2]], col, .62 + .26 * u, 1, kind, a * (.18 + .82 * Math.min(1, u / .3)));   // dimmer where all petals meet
+  }
+});
+// 5) stamens: gold filaments with glowing anthers
+for (let f = 0; f < 80; f++) {
+  const phi = rnd() * 6.283, tf = .28 + rnd() * .3, L = .2 + rnd() * .09;
+  for (let k = 0; k < 520; k++) {
+    const u = k < 160 ? .9 + rnd() * .1 : rnd() * .9, tip = k < 160;
+    const mk = th => { const tt = th * u; return add([HEAD[0], HEAD[1] + .03, HEAD[2]], [Math.sin(tt) * Math.cos(phi), Math.cos(tt) * 1.0, Math.sin(tt) * Math.sin(phi)], u * L); };
+    put(add(mk(tf), jit(tip ? .012 : .003)), add(mk(.06), jit(.003)), HEAD, tip ? [255, 176, 40] : [220, 190, 90], .82 + .12 * u, 1, tip ? 6 : 7, tip ? .28 : .12);
+  }
+}
+for (let k = 0; k < 2500; k++) { const s = rnd(), a = rnd() * 6.283, r = .02 * (1 - s);        // pistil
+  const p = [HEAD[0] + Math.cos(a) * r, HEAD[1] + .03 + s * .16, HEAD[2] + Math.sin(a) * r]; put(p, p, HEAD, [150, 230, 110], .8 + .1 * s, 0, 7, .18); }
+// (pollen motes removed 2026-11-04: Hudson -- 'random dots around the sky')
+// 7) grass: drawn as real solid blade meshes below (particles read as balls -- Hudson 2026-11-04)
+const B0 = stemC(0);
+
+// ---------------------------------------------------------------- three (same renderer + shader as the bloom)
+const Rr = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
+Rr.setPixelRatio(Math.min(devicePixelRatio || 1, 1.25)); Rr.setClearColor(0x000000, 0); document.body.appendChild(Rr.domElement);
+const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(36, 1, .02, 200);
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(P_END.subarray(0, n * 3), 3));
+geo.setAttribute('aBud', new THREE.BufferAttribute(P_BUD.subarray(0, n * 3), 3));
+geo.setAttribute('aBase', new THREE.BufferAttribute(P_BASE.subarray(0, n * 3), 3));
+geo.setAttribute('aCol', new THREE.BufferAttribute(COL.subarray(0, n * 3), 3));
+geo.setAttribute('aM', new THREE.BufferAttribute(META.subarray(0, n * 4), 4));
+geo.setAttribute('aA', new THREE.BufferAttribute(ALPHA.subarray(0, n), 1));
+const U = { uG: { value: 0 }, uO: { value: 0 }, uB: { value: 0 }, uT: { value: 0 }, uPulse: { value: 0 }, uVoice: { value: 0 },
+            uPix: { value: 1 }, uFade: { value: 1 }, uGr: { value: 0 }, uFl: { value: 1 }, uM: { value: 0 }, uCY: { value: 1.2 } };
+const mat = new THREE.ShaderMaterial({ uniforms: U, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: `
+    attribute vec3 aBud; attribute vec3 aBase; attribute vec3 aCol; attribute vec4 aM; attribute float aA;
+    attribute vec4 aTree; attribute vec4 aTC; attribute float aTS;
+    uniform float uG, uO, uB, uT, uPulse, uVoice, uPix, uFade, uFl, uM, uCY;
+    varying vec3 vC; varying float vA;
+    float h(float x){ return fract(sin(x*91.17)*43758.5453); }
+    void main(){
+      float kind = aM.w, seed = aM.z;
+      float f = smoothstep(aM.x, aM.x + .1, uG);
+      vec3 p = mix(aBase, aBud, f);
+      p = mix(p, position, aM.y * uO);
+      float a = aA * f;
+      float gust = sin(uT * 1.5 - .3) * .55 + sin(uT * .7 + .36) * .3 + sin(uT * 2.6) * .15;
+      float hgt = clamp((p.y + 1.18) / 2.1, 0., 1.);
+      float bend = (.055 + .085 * gust) * pow(hgt, 1.5);
+      p.x += bend; p.z += .015 * gust * hgt * hgt; p.y -= abs(bend) * .12 * hgt;
+      if (kind > 2.5 && kind < 5.5) p.x += .012 * sin(uT * 3.1 + seed * 6.283) * gust * aM.y * uO;
+      if (kind > .5 && kind < 1.5) {
+        float ld = length(position.xz - vec2(-.01, .02));
+        float rip = sin(uT * 2.1 - ld * 9. + position.y * 3.) * (.6 + .4 * gust);
+        p.y += rip * .045 * ld * ld * 4.; p.x += (.03 + .03 * gust) * ld * ld * 3.; }
+      if (kind > 1.5 && kind < 7.5) {
+        float hh = max(0., position.y - .3);
+        p.x += (.04 + .07 * gust) * hh * (1. - .6 * uO); p.z += .03 * sin(uT * 1.3) * hh * (1. - .6 * uO); }
+      // the flower lets go: seeds of light drift outward and fall slowly
+      if (uB > 0. && kind < 8.5) {
+        vec3 c = vec3(0., .25, 0.);
+        vec3 d = normalize(p - c + vec3(h(seed) - .5, h(seed + 1.7) - .4, h(seed + 3.1) - .5) * .6);
+        float sp = uB * (.5 + 1.1 * seed);
+        p += d * sp + vec3(sin(seed * 40. + uT) * .05, -.35 * uB * uB, cos(seed * 33. + uT) * .05) * uB;
+        a *= 1. - .82 * uB;
+      }
+      if (kind < .5) a *= smoothstep(-1.19, -1.1, position.y);
+      float openK = (kind > 2.5 && kind < 5.5) ? uO * f : 0.;
+      a *= 1. + openK * (kind == 5. ? 1.1 : kind == 4. ? .9 : .85);
+      a *= uFade * uFl;
+      // as the trunk grows, the open flower rides up on top of it and swells into the crown
+      if (kind > 2.5) { float lift = smoothstep(.05, .5, uM); vec3 hc = vec3(0., .3, 0.); p = hc + (p - hc) * (1. + .6 * lift) + vec3(0., (uCY - .3) * lift, 0.); }
+      // the flower becomes the tree: each point flows up along a soft arc to its place in the trunk or the blossoms
+      float mp = smoothstep(aTree.w * .85, aTree.w * .85 + .14, uM);
+      vec3 col = aCol;
+      if (mp > 0.) {
+        vec3 tp = aTree.xyz;
+        float th = clamp((tp.y + 1.18) / 3.4, 0., 1.);
+        tp.x += (.03 + .045 * gust) * th * th; tp.z += .012 * gust * th;
+        vec3 mid = mix(p, tp, .5) + vec3(sin(seed * 30.) * .3, .25 + .35 * h(seed + 5.), cos(seed * 21.) * .3);
+        p = mix(mix(p, mid, mp), mix(mid, tp, mp), mp);
+        a = mix(a, aTC.a * uFade * (.85 + .15 * sin(uT * 2.3 + seed * 40.)), mp);
+        col = mix(aCol, aTC.rgb, mp);
+      }
+      vC = col; vA = a;
+      vec4 mv = modelViewMatrix * vec4(p, 1.);
+      float sz = (kind == 6. ? 2.4 : kind == 5. ? 2.0 : 1.7) * (.75 + .5 * seed) * (1. + uB * .8);
+      float szT = clamp(aTS * (.75 + .5 * seed) * uPix * 3.2 / -mv.z, 1.2, 16.);
+      gl_PointSize = mix(min(sz * uPix * 3.2 / -mv.z, 26.), szT, mp);
+      gl_Position = projectionMatrix * mv;
+    }`,
+  fragmentShader: `varying vec3 vC; varying float vA;
+    void main(){ vec2 d = gl_PointCoord - .5; float r = dot(d, d); if (r > .25) discard;
+      float a = vA * (1. - smoothstep(0., .25, r)); gl_FragColor = vec4(vC * a, a); }` });
+const flower = new THREE.Points(geo, mat); flower.frustumCulled = false; scene.add(flower);
+
+// ---- GRASS: the bloom's tapered blades. A small patch that rises when the seed lands, and a wide meadow
+// that spreads out when the tree comes, so there's room for us to sit.
+function makeGrass(SITES, rIn, GR, TUFT, grow, fine) {
+  const SEG = 7, vtx = [], uvs = [], bas = [], fad = [], idx = [];
+  for (let b = 0; b < SITES * 2 + TUFT; b++) {
+    const tuft = b >= SITES * 2;
+    const si = b >> 1, rr = tuft ? .012 + .26 * Math.pow(rnd(), 1.9) : rIn + (GR - rIn) * Math.sqrt((si + .5) / SITES) + (rnd() - .5) * .02;
+    const aa = tuft ? rnd() * 6.283 : si * 2.39996 + (rnd() - .5) * .12;
+    const edge = rr / (GR + .05), off = (b & 1) ? .012 : -.012;
+    const bx = B0[0] + Math.cos(aa) * rr + (tuft ? 0 : off), bz = B0[2] + (tuft ? 0 : .1) + Math.sin(aa) * rr * (tuft ? 1 : 1.05) + (tuft ? 0 : off * .5);
+    const H = (.11 + rnd() * .14) * (1 - .55 * edge) * (tuft ? 1 + .4 * Math.max(0, 1 - rr / .25) : 1), lean = (25 + rnd() * 20) * Math.PI / 180;
+    const dx = Math.tan(lean) * H * (.85 + rnd() * .3) * (fine ? .5 : 1), dz = (rnd() - .5) * H * .35;
+    const Wb = (.012 + rnd() * .01) * (fine ? .55 : 1), face = rnd() * Math.PI, fx = Math.cos(face), fz = Math.sin(face);
+    const f = .5 + .5 * (1 - edge * edge), v0 = vtx.length / 3;
+    for (let i = 0; i <= SEG; i++) {
+      const u = i / SEG, bend = u * u, w = Wb * Math.pow(1 - u, .85);
+      const cx = bx + dx * bend, cy = Y0 + u * H * (fine ? .5 : 1) * (1 - .1 * bend), cz = bz + dz * bend;
+      for (const sd of [-1, 1]) { vtx.push(cx + fx * sd * w, cy, cz + fz * sd * w); uvs.push(sd < 0 ? 0 : 1, u); bas.push(bx, Y0, bz); fad.push(f); }
+      if (i < SEG) { const q = v0 + i * 2; idx.push(q, q + 1, q + 2, q + 1, q + 3, q + 2); }
+    }
+  }
+  const gg = new THREE.BufferGeometry();
+  gg.setAttribute('position', new THREE.Float32BufferAttribute(vtx, 3));
+  gg.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  gg.setAttribute('aBase', new THREE.Float32BufferAttribute(bas, 3));
+  gg.setAttribute('aFade', new THREE.Float32BufferAttribute(fad, 1));
+  gg.setIndex(idx);
+  const gm = new THREE.ShaderMaterial({ uniforms: { uT: U.uT, uFade: U.uFade, uGr: grow }, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+    vertexShader: `attribute vec3 aBase; attribute float aFade; uniform float uT, uGr; varying vec2 vUv; varying float vF;
+      void main(){ vec3 p = position; float u = uv.y;
+        p.y = aBase.y + (p.y - aBase.y) * uGr; p.x = aBase.x + (p.x - aBase.x) * uGr; p.z = aBase.z + (p.z - aBase.z) * uGr;
+        float gust = sin(uT * 1.5 - aBase.x * 5.5 - aBase.z * 2.5) * .55 + sin(uT * .7 + aBase.z * 3.) * .3 + sin(uT * 2.6 - aBase.x * 9.) * .15;
+        float bendAmt = (.035 + .05 * gust) * pow(u, 1.6);
+        p.x += bendAmt; p.z += .01 * gust * u * u; p.y -= abs(bendAmt) * .35 * u;
+        vUv = uv; vF = aFade; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.); }`,
+    fragmentShader: `uniform float uFade, uGr; varying vec2 vUv; varying float vF;
+      void main(){ float across = abs(vUv.x * 2. - 1.);
+        vec3 base = vec3(.12, .36, .17), tip = vec3(.56, .9, .46);
+        vec3 c = mix(base, tip, pow(vUv.y, .9));
+        c *= .78 + .42 * (1. - smoothstep(0., .35, across));
+        c += vec3(.05, .12, .05) * smoothstep(.75, 1., across);
+        gl_FragColor = vec4(c, .92 * vF * uFade * uGr); }` });
+  const grass = new THREE.Mesh(gg, gm); grass.frustumCulled = false; grass.renderOrder = -1; scene.add(grass);
+  const R = GR + .2;
+  const gd = new THREE.Mesh(new THREE.CircleGeometry(R, 64), new THREE.ShaderMaterial({ uniforms: { uFade: U.uFade, uGr: grow, uR: { value: R } }, transparent: true, depthWrite: false,
+    vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
+    fragmentShader: `uniform float uFade, uGr, uR; varying vec2 vP; void main(){ float r = length(vP) / uR; gl_FragColor = vec4(.05, .09, .05, .55 * (1. - smoothstep(.2, 1., r)) * uFade * uGr); }` }));
+  gd.rotation.x = -Math.PI / 2; gd.position.set(B0[0], Y0 - .003, B0[2] + .1); gd.renderOrder = -2; scene.add(gd);
+}
+const MEADOW = { value: 0 };
+makeGrass(170, .05, .64, 46, U.uGr);
+makeGrass(15000, .7, 7.5, 0, MEADOW, true);
+
+function resize() {
+  const w = innerWidth, hh = innerHeight; Rr.setSize(w, hh); cam.aspect = w / hh; cam.updateProjectionMatrix();
+  U.uPix.value = hh / 1440 * 1.9; buildKeys();
+}
+
+// ---------------------------------------------------------------- the SEED (exactly the bloom's)
+const SEED = (() => {
+  const N = 5000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), al = new Float32Array(N), tr = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const trail = i > 2600, a = rnd() * 6.283, u = rnd() * 2 - 1, r = Math.cbrt(rnd());
+    if (!trail) { pos[i * 3] = Math.sqrt(1 - u * u) * Math.cos(a) * .028 * r; pos[i * 3 + 1] = u * .045 * r; pos[i * 3 + 2] = Math.sqrt(1 - u * u) * Math.sin(a) * .028 * r;
+      const c = mixc([255, 196, 90], [255, 236, 170], rnd()); col.set([c[0] / 255, c[1] / 255, c[2] / 255], i * 3); al[i] = .5 + .5 * rnd(); tr[i] = 0; }
+    else { const t = rnd(); pos[i * 3] = (rnd() - .5) * .03 * (1 + t * 2); pos[i * 3 + 1] = t * .9; pos[i * 3 + 2] = (rnd() - .5) * .03 * (1 + t * 2);
+      col.set([1, .82, .5], i * 3); al[i] = .5 * (1 - t) * rnd(); tr[i] = t; }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('aA', new THREE.BufferAttribute(al, 1)); g.setAttribute('aTr', new THREE.BufferAttribute(tr, 1));
+  const m = new THREE.ShaderMaterial({ uniforms: { uS: { value: 0 }, uTrail: { value: 1 }, uPix: U.uPix, uT: U.uT }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `attribute vec3 aCol; attribute float aA, aTr; uniform float uS, uTrail, uPix, uT; varying vec3 vC; varying float vA;
+      void main(){ vec3 p = position; p.x += sin(uT * 7. + aTr * 20.) * .006 * aTr;
+        vC = aCol; vA = aA * uS * (aTr > 0. ? uTrail : 1.); vec4 mv = modelViewMatrix * vec4(p, 1.);
+        gl_PointSize = min((aTr > 0. ? 1.6 : 2.4) * uPix * 3.2 / -mv.z, 18.); gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying vec3 vC; varying float vA; void main(){ vec2 d = gl_PointCoord - .5; float r = dot(d, d); if (r > .25) discard;
+      float a = vA * (1. - smoothstep(0., .25, r)); gl_FragColor = vec4(vC * a, a); }` });
+  const obj = new THREE.Points(g, m); obj.frustumCulled = false; scene.add(obj);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(.02, .05, 64), new THREE.ShaderMaterial({ uniforms: { uR: { value: 0 } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
+    fragmentShader: `uniform float uR; void main(){ gl_FragColor = vec4(1., .82, .45, 1.) * .55 * (1. - uR) * step(.001, uR); }` }));
+  ring.rotation.x = -Math.PI / 2; ring.position.set(stemC(0)[0], Y0 + .004, stemC(0)[2]); scene.add(ring);
+  return { obj, m, ring };
+})();
+function seedStep(e) {
+  const t = clamp((e - .3) / 2.0, 0, 1), fall = t * t;
+  const y = lerp(2.75, Y0 + .02, fall) - clamp((e - 2.3) / .6, 0, 1) * .05;
+  const base = stemC(0);
+  SEED.obj.position.set(base[0] + Math.sin(e * 2.1) * .03 * (1 - fall), y, base[2]);
+  SEED.obj.rotation.z = e * 1.3;
+  SEED.m.uniforms.uS.value = clamp(e / .4, 0, 1) * (1 - clamp((e - 2.35) / .7, 0, 1));
+  SEED.m.uniforms.uTrail.value = 1 - clamp((e - 2.0) / .4, 0, 1);
+  const r = clamp((e - 2.3) / 1.4, 0, 1);
+  SEED.ring.scale.setScalar(1 + r * 13); SEED.ring.material.uniforms.uR.value = r > 0 && r < 1 ? r : 0;
+}
+
+// ---------------------------------------------------------------- CLOUDS: the same glowing points, for the
+// tree, for us, and for the dog. Every point knows where it lives and where it grows out from.
+function cloudMat(extra, solid) {                       // solid = real colored dots (leaves) instead of glowing light
+  return new THREE.ShaderMaterial({ uniforms: Object.assign({ uT: U.uT, uPix: U.uPix, uFade: U.uFade, uG: { value: 1 }, uA: { value: 1 }, uSway: { value: 0 }, uSolid: { value: solid ? 1 : 0 } }, extra || {}),
+    transparent: true, depthWrite: false, blending: solid ? THREE.NormalBlending : THREE.AdditiveBlending,
+    vertexShader: `attribute vec3 aBase, aCol, aM; attribute float aA; uniform float uG, uA, uT, uPix, uFade, uSway; varying vec3 vC; varying float vA;
+      void main(){ float f = smoothstep(aM.x, aM.x + .05, uG);
+        vec3 p = mix(aBase, position, f);
+        float hgt = clamp((p.y + 1.18) / 3., 0., 1.);
+        float gust = sin(uT * 1.5 - .3) * .55 + sin(uT * .7 + .36) * .3 + sin(uT * 2.6) * .15;
+        p.x += uSway * (.03 + .045 * gust) * hgt * hgt; p.z += uSway * .012 * gust * hgt;
+        vC = aCol; vA = aA * f * uA * uFade * (.85 + .15 * sin(uT * 2.3 + aM.y * 40.));
+        vec4 mv = modelViewMatrix * vec4(p, 1.);
+        gl_PointSize = clamp(aM.z * (.75 + .5 * aM.y) * uPix * 3.2 / -mv.z, 1.2, 16.);
+        gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `uniform float uSolid; varying vec3 vC; varying float vA;
+      void main(){ vec2 d = gl_PointCoord - .5; float r = dot(d, d); if (r > .25) discard;
+        if (uSolid > .5) { gl_FragColor = vec4(vC, min(1., vA * 4.6)); return; }
+        float a = vA * (1. - smoothstep(0., .25, r)); gl_FragColor = vec4(vC * a, a); }` });
+}
+function Cloud(max) { this.P = new Float32Array(max * 3); this.B = new Float32Array(max * 3); this.C = new Float32Array(max * 3); this.M = new Float32Array(max * 3); this.A = new Float32Array(max); this.n = 0; this.max = max; }
+Cloud.prototype.put = function (p, b, c, g, s, a) {
+  if (this.n >= this.max) return; const i = this.n * 3;
+  this.P[i] = p[0]; this.P[i + 1] = p[1]; this.P[i + 2] = p[2];
+  this.B[i] = b[0]; this.B[i + 1] = b[1]; this.B[i + 2] = b[2];
+  this.C[i] = c[0]; this.C[i + 1] = c[1]; this.C[i + 2] = c[2];
+  this.M[i] = g; this.M[i + 1] = rnd(); this.M[i + 2] = s; this.A[this.n] = a; this.n++;
+};
+Cloud.prototype.points = function (m) {
+  const g = new THREE.BufferGeometry(), k = this.n * 3;
+  g.setAttribute('position', new THREE.BufferAttribute(this.P.subarray(0, k), 3));
+  g.setAttribute('aBase', new THREE.BufferAttribute(this.B.subarray(0, k), 3));
+  g.setAttribute('aCol', new THREE.BufferAttribute(this.C.subarray(0, k), 3));
+  g.setAttribute('aM', new THREE.BufferAttribute(this.M.subarray(0, k), 3));
+  g.setAttribute('aA', new THREE.BufferAttribute(this.A.subarray(0, this.n), 1));
+  const o = new THREE.Points(g, m); o.frustumCulled = false; return o;
+};
+const sphereDir = () => { const u = rnd() * 2 - 1, a = rnd() * 6.283, s = Math.sqrt(1 - u * u); return [s * Math.cos(a), u, s * Math.sin(a)]; };
+const rgb = (r, g, b) => [r / 255, g / 255, b / 255];
+function blob(cl, c, r, count, col, s, a, keep) {        // a soft glowing ellipsoid (mostly its skin)
+  for (let k = 0; k < count; k++) {
+    const d = sphereDir(); if (keep && !keep(d)) { k--; continue; }
+    const q = .82 + .18 * Math.cbrt(rnd()), p = [c[0] + d[0] * r[0] * q, c[1] + d[1] * r[1] * q, c[2] + d[2] * r[2] * q];
+    cl.put(p, p, col, 0, s, a);
+  }
+}
+function limb(cl, from, to, r, count, col, s, a) {       // a glowing capsule from -> to
+  const d = nrm([to[0] - from[0], to[1] - from[1], to[2] - from[2]]), L = Math.hypot(to[0] - from[0], to[1] - from[1], to[2] - from[2]);
+  const ref = Math.abs(d[1]) > .9 ? [1, 0, 0] : [0, 1, 0], u1 = nrm(cross(d, ref)), u2 = cross(d, u1);
+  for (let k = 0; k < count; k++) {
+    const t = rnd(), ang = rnd() * 6.283, rr = r * (.85 + .15 * rnd());
+    const c = add(from, d, t * L), p = add(add(c, u1, Math.cos(ang) * rr), u2, Math.sin(ang) * rr);
+    cl.put(p, p, col, 0, s, a);
+  }
+}
+
+// ---------------------------------------------------------------- the TREE: grown from the flower's own light
+// every point of the flower gets a home in the tree. the stem streams up into the trunk and the branches,
+// and the petals drift up and become the blossoms.
+const TREE = (() => {
+  const wood = [], tips = []; let maxPath = 0;
+  function branch(p, dir, len, rad, depth, path) {        // every limb bends a little on its way out, like real wood
+    const ref = Math.abs(dir[1]) > .95 ? [1, 0, 0] : [0, 1, 0], a1 = nrm(cross(dir, ref)), a2 = cross(dir, a1), ba = rnd() * 6.283;
+    const bend = nrm(add(add(dir, a1, Math.cos(ba) * .22), a2, Math.sin(ba) * .22));
+    const mid = add(p, dir, len * .5), end = add(mid, bend, len * .5);
+    wood.push({ p, end: mid, dir, len: len * .5, r0: rad, r1: rad * .86, path, depth });
+    wood.push({ p: mid, end, dir: bend, len: len * .5, r0: rad * .86, r1: rad * .72, path: path + len * .5, depth });
+    if (depth === 0) { tips.push({ end, path: path + len }); maxPath = Math.max(maxPath, path + len); return; }
+    const top = depth === 7, kids = top ? 4 : depth > 4 ? 3 : (rnd() < .5 ? 3 : 2), spin = rnd() * 6.283;
+    for (let c = 0; c < kids; c++) {
+      const b1 = nrm(cross(bend, Math.abs(bend[1]) > .95 ? [1, 0, 0] : [0, 1, 0])), b2 = cross(bend, b1);
+      const az = spin + c * 6.283 / kids + (rnd() - .5) * .5, tilt = top ? .62 + rnd() * .22 : .34 + rnd() * .34;
+      let nd = add(add([bend[0] * Math.cos(tilt), bend[1] * Math.cos(tilt), bend[2] * Math.cos(tilt)], b1, Math.sin(tilt) * Math.cos(az)), b2, Math.sin(tilt) * Math.sin(az));
+      nd = nrm(add(nd, [0, .16, 0]));
+      branch(end, nd, len * (top ? .66 : .74 + rnd() * .06), rad * (top ? .55 : .66), depth - 1, path + len);
+    }
+  }
+  branch([B0[0], Y0 - .02, B0[2]], [0, 1, 0], 1.0, .14, 7, 0);   // one strong trunk, then four big limbs
+  const W = new Cloud(420000), Bl = new Cloud(340000);
+  for (const w of wood) {
+    const ref = Math.abs(w.dir[1]) > .95 ? [1, 0, 0] : [0, 1, 0], u1 = nrm(cross(w.dir, ref)), u2 = cross(w.dir, u1);
+    const count = Math.max(24, Math.round(w.len * w.r0 * 150000));
+    for (let k = 0; k < count; k++) {
+      const s = rnd(), ang = rnd() * 6.283, rr = lerp(w.r0, w.r1, s);
+      const c = add(w.p, w.dir, s * w.len), p = add(add(c, u1, Math.cos(ang) * rr), u2, Math.sin(ang) * rr);
+      const rim = Math.pow(Math.abs(Math.cos(ang)), 3);
+      W.put(p, w.p, rgb(...mixc([110, 72, 46], [232, 168, 116], .25 + .5 * rim + .2 * rnd())), (w.path + s * w.len) / maxPath * .5, 4.4, .42 + .3 * rim);
+    }
+  }
+  for (let k = 0; k < 9000; k++) {                       // the root flare where the trunk meets the ground
+    const t = Math.pow(rnd(), 1.6), ang = rnd() * 6.283, rr = lerp(.26, .13, Math.sqrt(t)) * (1 + .18 * Math.pow(Math.abs(Math.sin(ang * 2.5)), 3)), y = Y0 + t * .2;
+    const p = [B0[0] + Math.cos(ang) * rr, y, B0[2] + Math.sin(ang) * rr], rim = Math.pow(Math.abs(Math.cos(ang)), 3);
+    W.put(p, [B0[0], Y0, B0[2]], rgb(...mixc([110, 72, 46], [232, 168, 116], .2 + .5 * rim)), 0, 4.4, .42 + .3 * rim);
+  }
+  // the crown: clusters of blossoms and leaves at the ends of the limbs, an umbrella of pink and white with green
+  // leaves tucked in, bright on top, deep and dark inside and underneath -- with gaps where the branches show.
+  const clumps = wood.filter((w, i) => (w.depth === 1 || (w.depth === 2 && rnd() < .55)) && i % 2 === 1).map((w) => ({ c: w.end, R: (w.depth === 1 ? .17 : .24) + rnd() * .08, g: w.path / maxPath }));
+  let cTop = -9, cy = 0; for (const k of clumps) { cTop = Math.max(cTop, k.c[1] + k.R); cy += k.c[1] / clumps.length; }
+  const per = Math.floor(330000 / clumps.length);
+  for (const k of clumps) {
+    const tint = rnd();
+    for (let i = 0; i < per; i++) {
+      const d = sphereDir(), q = Math.pow(rnd(), .3);
+      const p = [k.c[0] + d[0] * k.R * q, k.c[1] + d[1] * k.R * q * .78 + .03, k.c[2] + d[2] * k.R * q];
+      const up = clamp((p[1] - cy) / 1.0 * .5 + .55, 0, 1), face = d[1] * .5 + .5;
+      const shade = .3 + .45 * up + .35 * face * q;
+      const r = rnd(), kind = r < .64 ? 0 : r < .77 ? 1 : 2;   // blossom, white blossom, leaf
+      const base = kind === 0 ? mixc(tint < .5 ? [235, 92, 160] : [250, 130, 185], [255, 182, 218], rnd())
+                 : kind === 1 ? mixc([255, 226, 238], [255, 248, 252], rnd()) : mixc([52, 128, 60], [128, 205, 100], rnd());
+      Bl.put(p, k.c, rgb(...base.map((v) => Math.min(255, v * shade))), .5 + .3 * up + .04 * rnd(), kind === 2 ? 4 : 4.4, (kind === 2 ? .17 : .2) * (.55 + .45 * q));
+    }
+  }
+  let top = -9; for (const tp of tips) top = Math.max(top, tp.end[1]);
+  top = Math.max(top, cTop);
+  return { W, Bl, top, tips, crownY: cy };
+})();
+{ // hand every point of the flower its place in the tree
+  const AT = new Float32Array(n * 4), AC = new Float32Array(n * 4), AS = new Float32Array(n);
+  const green = [], petal = [], W = TREE.W, Bl = TREE.Bl;
+  for (let i = 0; i < n; i++) (META[i * 4 + 3] < 2.5 ? green : petal).push(i);
+  green.sort((a, b) => P_BUD[a * 3 + 1] - P_BUD[b * 3 + 1]);                     // bottom of the stem -> bottom of the trunk
+  const order = Array.from({ length: W.n }, (_, i) => i).sort((a, b) => W.M[a * 3] - W.M[b * 3]);
+  green.forEach((i, r) => {
+    const w = order[Math.min(W.n - 1, Math.floor(r / green.length * W.n))], j = jit(.012);
+    AT.set([W.P[w * 3] + j[0], W.P[w * 3 + 1] + j[1], W.P[w * 3 + 2] + j[2], W.M[w * 3] * .6], i * 4);
+    AC.set([W.C[w * 3], W.C[w * 3 + 1], W.C[w * 3 + 2], W.A[w] * .5], i * 4); AS[i] = 4.2;
+  });
+  for (const i of petal) {
+    const b = Math.floor(rnd() * Bl.n), j = jit(.02);
+    AT.set([Bl.P[b * 3] + j[0], Bl.P[b * 3 + 1] + j[1], Bl.P[b * 3 + 2] + j[2], Bl.M[b * 3]], i * 4);
+    AC.set([lerp(COL[i * 3], Bl.C[b * 3], .5), lerp(COL[i * 3 + 1], Bl.C[b * 3 + 1], .5), lerp(COL[i * 3 + 2], Bl.C[b * 3 + 2], .5), Bl.A[b] * .8], i * 4); AS[i] = 5.4;
+  }
+  geo.setAttribute('aTree', new THREE.BufferAttribute(AT, 4));
+  geo.setAttribute('aTC', new THREE.BufferAttribute(AC, 4));
+  geo.setAttribute('aTS', new THREE.BufferAttribute(AS, 1));
+  U.uCY.value = TREE.crownY;
+}
+// and the tree fills in around the flower's light as it arrives, so it reads solid and bright
+scene.add(TREE.W.points(cloudMat({ uG: U.uM, uA: { value: .5 }, uSway: { value: 1 } })));
+scene.add(TREE.Bl.points(cloudMat({ uG: U.uM, uA: { value: 1 }, uSway: { value: 1 } }, true)));
+
+// falling petals + fireflies (all on the GPU)
+function drifters(N, kind) {
+  const g = new THREE.BufferGeometry(), pos = new Float32Array(N * 3), sd = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const a = rnd() * 6.283, r = Math.sqrt(rnd()) * (kind ? 1.6 : 1.3); pos.set([Math.cos(a) * r, rnd(), Math.sin(a) * r * .7], i * 3); sd[i] = rnd(); }
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aS', new THREE.BufferAttribute(sd, 1));
+  const m = new THREE.ShaderMaterial({ uniforms: { uT: U.uT, uPix: U.uPix, uA: { value: 0 }, uTop: { value: TREE.top } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: kind
+      ? `attribute float aS; uniform float uT, uPix, uA; varying float vA; varying vec3 vC;
+         void main(){ vec3 p = position; p.y = -.95 + p.y * 1.7 + sin(uT * (.3 + aS * .4) + aS * 30.) * .18;
+           p.x += sin(uT * (.25 + aS * .3) + aS * 17.) * .35; p.z += cos(uT * (.2 + aS * .3) + aS * 11.) * .25;
+           vA = uA * (.25 + .75 * pow(abs(sin(uT * (1.2 + aS) + aS * 50.)), 3.)); vC = vec3(1., .86, .5);
+           vec4 mv = modelViewMatrix * vec4(p, 1.); gl_PointSize = clamp(5. * uPix * 3.2 / -mv.z, 1.5, 9.); gl_Position = projectionMatrix * mv; }`
+      : `attribute float aS; uniform float uT, uPix, uA, uTop; varying float vA; varying vec3 vC;
+         void main(){ vec3 p = position; float H = uTop + 1.18; float fall = mod(uT * (.09 + aS * .07) + aS * H, H);
+           p.y = uTop - fall; p.x += sin(uT * (.8 + aS) + aS * 20.) * .12 + fall * .25; p.z += cos(uT * .7 + aS * 9.) * .08;
+           vA = uA * .5 * smoothstep(-1.18, -1.0, p.y); vC = mix(vec3(1., .42, .72), vec3(1., .75, .88), aS);
+           vec4 mv = modelViewMatrix * vec4(p, 1.); gl_PointSize = clamp(4.5 * uPix * 3.2 / -mv.z, 1.3, 8.); gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying float vA; varying vec3 vC; void main(){ vec2 d = gl_PointCoord - .5; float r = dot(d, d); if (r > .25) discard;
+      float a = vA * (1. - smoothstep(0., .25, r)); gl_FragColor = vec4(vC * a, a); }` });
+  const o = new THREE.Points(g, m); o.frustumCulled = false; scene.add(o); return m;
+}
+const PETALS = drifters(700, 0), FLIES = drifters(70, 1);
+
+// stars, far away
+{
+  const N = 1400, g = new THREE.BufferGeometry(), pos = new Float32Array(N * 3), sd = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const d = sphereDir(); d[1] = Math.abs(d[1]) * .9 + .06; pos.set([d[0] * 60, d[1] * 60 - 6, d[2] * 60 - 20], i * 3); sd[i] = rnd(); }
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aS', new THREE.BufferAttribute(sd, 1));
+  const m = new THREE.ShaderMaterial({ uniforms: { uT: U.uT, uFade: U.uFade }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `attribute float aS; uniform float uT, uFade; varying float vA; void main(){ vA = uFade * (.15 + .35 * aS) * (.6 + .4 * sin(uT * (.5 + aS) + aS * 40.));
+      vec4 mv = modelViewMatrix * vec4(position, 1.); gl_PointSize = 1.2 + aS * 1.4; gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying float vA; void main(){ vec2 d = gl_PointCoord - .5; float r = dot(d, d); if (r > .25) discard; float a = vA * (1. - smoothstep(0., .25, r)); gl_FragColor = vec4(vec3(1., .95, .98) * a, a); }` });
+  const o = new THREE.Points(g, m); o.frustumCulled = false; scene.add(o);
+}
+
+// ---------------------------------------------------------------- US: me, you, and the dog.
+// real little people: shaped bodies, knees and elbows, faces with eyes that shine, hair that moves.
+// lit by the night and rimmed in pink by the tree.
+const LIGHT_DIR = new THREE.Vector3(.35, .75, .55).normalize(), toonCache = {};
+const CORE = new THREE.MeshBasicMaterial({ color: 0x090a13 });   // a dark core under the dots, so only the front dots show
+const coreCache = {};
+function toon(hex) { return coreCache[hex] || (coreCache[hex] = new THREE.MeshBasicMaterial({ color: new THREE.Color(hex).multiplyScalar(.86) })); }   // the core takes each part's own color, so no dark speckle
+const DOTS = new THREE.ShaderMaterial({ uniforms: { uPix: U.uPix, uL: { value: LIGHT_DIR } }, transparent: true, depthWrite: false,
+  vertexShader: `attribute vec3 aCol; uniform float uPix; uniform vec3 uL; varying vec3 vC;
+    void main(){ vec3 n = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.); mv.xyz += n * .004;
+      float lit = smoothstep(-.35, .8, dot(n, uL));
+      float rim = pow(1. - max(dot(n, normalize(-mv.xyz)), 0.), 2.4);                     // pink light from the tree on every edge
+      vC = aCol * (.42 + .82 * lit) + vec3(1., .5, .78) * rim * .5;
+      gl_PointSize = clamp(8.8 * uPix / -mv.z, 1.3, 3.4); gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `varying vec3 vC; void main(){ vec2 d = gl_PointCoord - .5; if (dot(d, d) > .25) discard; gl_FragColor = vec4(vC, .93); }` });
+function addDots(mesh, density) {                       // scatter dots over a shape's surface, evenly by area
+  const g = mesh.geometry, P = g.attributes.position, N = g.attributes.normal, I = g.index, sc = mesh.scale;
+  const tri = I ? I.array : Array.from({ length: P.count }, (_, i) => i), T = tri.length / 3, cum = new Float32Array(T);
+  const v = (i) => [P.getX(i) * sc.x, P.getY(i) * sc.y, P.getZ(i) * sc.z];
+  let tot = 0;
+  for (let t = 0; t < T; t++) { const a = v(tri[t * 3]), b = v(tri[t * 3 + 1]), c = v(tri[t * 3 + 2]);
+    const x = cross([b[0] - a[0], b[1] - a[1], b[2] - a[2]], [c[0] - a[0], c[1] - a[1], c[2] - a[2]]); tot += Math.hypot(x[0], x[1], x[2]) / 2; cum[t] = tot; }
+  const count = Math.min(24000, Math.max(40, Math.round(tot * density)));
+  const pos = new Float32Array(count * 3), nor = new Float32Array(count * 3), col = new Float32Array(count * 3);
+  const base = new THREE.Color(mesh.userData.hex), lum = base.r * .3 + base.g * .59 + base.b * .11;
+  for (let k = 0; k < count; k++) {
+    const r = rnd() * tot; let lo = 0, hi = T - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (cum[m] < r) lo = m + 1; else hi = m; }
+    let u = rnd(), w = rnd(); if (u + w > 1) { u = 1 - u; w = 1 - w; }
+    const i0 = tri[lo * 3], i1 = tri[lo * 3 + 1], i2 = tri[lo * 3 + 2], z = 1 - u - w;
+    for (let c = 0; c < 3; c++) {
+      const get = (A, i) => c === 0 ? A.getX(i) : c === 1 ? A.getY(i) : A.getZ(i);
+      pos[k * 3 + c] = get(P, i0) * z + get(P, i1) * u + get(P, i2) * w;
+      nor[k * 3 + c] = get(N, i0) * z + get(N, i1) * u + get(N, i2) * w;
+    }
+    if (mesh.userData.fur) {                             // fur: dots stand off the surface at random lengths, so the edge is soft
+      const nx = nor[k * 3] / sc.x, ny = nor[k * 3 + 1] / sc.y, nz = nor[k * 3 + 2] / sc.z, nl = Math.hypot(nx, ny, nz) || 1, Lf = mesh.userData.fur * Math.pow(rnd(), .7);
+      pos[k * 3] += nx / nl * Lf / sc.x; pos[k * 3 + 1] += ny / nl * Lf / sc.y; pos[k * 3 + 2] += nz / nl * Lf / sc.z;
+    }
+    let j = .94 + rnd() * .12;                           // every dot a slightly different shade, like real fabric, skin, fur
+    const sheen = lum < .25 && rnd() < .07 ? .18 : 0;    // dark fur catches the light here and there
+    col[k * 3] = Math.min(1, base.r * j + sheen); col[k * 3 + 1] = Math.min(1, base.g * j + sheen); col[k * 3 + 2] = Math.min(1, base.b * j + sheen * 1.05);
+  }
+  const dg = new THREE.BufferGeometry();
+  dg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); dg.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); dg.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
+  const d = new THREE.Points(dg, DOTS); d.frustumCulled = false; d.renderOrder = 2; mesh.add(d);
+  return count;
+}
+function dotify(root, density) { const list = []; root.traverse((o) => { if (o.isMesh && o.userData.hex !== undefined) list.push(o); }); let n = 0; for (const m of list) n += addDots(m, density); return n; }
+const geoCache = {};
+function taper(r1, r2, len) {                         // a limb: thick at the joint (origin), thinner toward the end (-y)
+  const key = [r1, r2, len].join(); if (geoCache[key]) return geoCache[key];
+  const pts = [];
+  for (let i = 0; i <= 8; i++) { const a = -Math.PI / 2 + i / 8 * Math.PI / 2; pts.push(new THREE.Vector2(Math.cos(a) * r2 + 1e-4, -len + Math.sin(a) * r2)); }
+  for (let i = 0; i <= 8; i++) { const a = i / 8 * Math.PI / 2; pts.push(new THREE.Vector2(Math.cos(a) * r1 + 1e-4, Math.sin(a) * r1)); }
+  return geoCache[key] = new THREE.LatheGeometry(pts, 20);
+}
+function lathe(prof, seg) { return new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x + 1e-4, y)), seg || 32); }
+const SPH = new THREE.SphereGeometry(1, 28, 20), CAP = new THREE.SphereGeometry(1, 28, 16, 0, Math.PI * 2, 0, 1.35);
+// a thin dark ink line around every shape, like a cartoon -- keeps them crisp even when they're small
+const INK = new THREE.ShaderMaterial({ side: THREE.BackSide,
+  vertexShader: `void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); vec3 n = normalize(normalMatrix * normal); mv.xyz += n * (-mv.z) * .0019; gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `void main(){ gl_FragColor = vec4(.08, .045, .09, 1.); }` });
+let INKED = false;
+function put3(parent, g, hex, pos, scl, rot, ink) {
+  const m = new THREE.Mesh(g, toon(hex)); m.userData.hex = hex; if (typeof FURRY !== 'undefined' && FURRY) m.userData.fur = FURRY; if (INKED && ink !== false) m.add(new THREE.Mesh(g, INK));
+  m.position.set(pos[0], pos[1], pos[2]); if (scl) m.scale.set(scl[0], scl[1], scl[2]); if (rot) m.rotation.set(rot[0], rot[1], rot[2]);
+  parent.add(m); return m;
+}
+const DOWN = new THREE.Vector3(0, -1, 0);
+function bone(parent, a, b, r1, r2, hex, scl) {       // a limb from point a to point b
+  const d = new THREE.Vector3(b[0] - a[0], b[1] - a[1], b[2] - a[2]), L = d.length();
+  const m = new THREE.Mesh(taper(r1, r2, L), toon(hex)); m.userData.hex = hex; if (typeof FURRY !== 'undefined' && FURRY) m.userData.fur = FURRY; if (INKED && L > .03) m.add(new THREE.Mesh(m.geometry, INK));
+  m.position.set(a[0], a[1], a[2]); m.quaternion.setFromUnitVectors(DOWN, d.normalize()); if (scl) m.scale.set(scl[0], scl[1], scl[2]);
+  parent.add(m); return m;
+}
+function joint(parent, x, y, z) { const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g); return g; }
+const SKIN = 0xffd0ad, EYE_W = 0xfdfaf6, IRIS = 0x4a2c1a, PUPIL = 0x120a08, LIPS = 0xc95a6c, BLUSH = 0xff9ab8;
+
+function human(girl) {                                   // sculpted: real limb shapes, hands with fingers, ankles, hair in locks
+  const root = new THREE.Group(); root.rotation.order = 'YXZ';
+  const HAIR = girl ? 0x6e3519 : 0x3b2414, HIP = .52, torso = joint(root, 0, HIP, 0), k = girl ? .86 : 1;
+  const shape = (pts) => lathe(pts.map(([r, y]) => [r * k, y]), 28);
+  let skirt = null;
+  if (girl) {
+    skirt = joint(torso, 0, 0, 0);
+    put3(skirt, lathe([[0, -.13], [.16, -.13], [.15, -.09], [.135, -.04], [.1, .03], [.068, .095]]), 0xff6fae, [0, 0, 0], [1, 1, .76]);
+    put3(skirt, new THREE.TorusGeometry(.158, .008, 8, 36), 0xffffff, [0, -.128, 0], [1, .76, 1], [Math.PI / 2, 0, 0]);
+    put3(torso, lathe([[0, .085], [.068, .095], [.064, .14], [.084, .195], [.088, .225], [.08, .258], [.07, .275], [.045, .292], [0, .296]]), 0xff6fae, [0, 0, 0], [1, 1, .62]);
+    put3(torso, new THREE.TorusGeometry(.068, .009, 8, 28), 0xff4f95, [0, .098, 0], [1, .62, 1], [Math.PI / 2, 0, 0]);
+    for (const s of [-1, 1]) put3(torso, SPH, 0xff8fc0, [s * .098, .25, 0], [.036, .03, .032]);
+  } else {
+    put3(torso, SPH, 0x2f4a8a, [0, .01, 0], [.092, .065, .068]);
+    put3(torso, lathe([[0, -.025], [.094, -.02], [.09, .04], [.086, .1], [.095, .16], [.11, .215], [.118, .245], [.108, .275], [.06, .3], [0, .305]]), 0x4f86ff, [0, 0, 0], [1, 1, .6]);
+    for (const s of [-1, 1]) put3(torso, SPH, 0x4f86ff, [s * .104, .25, 0], [.042, .04, .042]);          // shoulders
+    put3(torso, new THREE.TorusGeometry(.094, .011, 8, 30), 0x3d6fe0, [0, -.018, 0], [1, .6, 1], [Math.PI / 2, 0, 0]);
+    put3(torso, new THREE.TorusGeometry(.052, .02, 10, 24), 0x3d6fe0, [0, .29, -.032], null, [Math.PI / 2.3, 0, 0]);
+    for (const s of [-1, 1]) put3(torso, SPH, 0xffffff, [s * .02, .25, .066], [.004, .026, .004], null, false);
+    put3(torso, SPH, 0x3d6fe0, [0, .07, .053], [.055, .026, .01]);
+  }
+  bone(torso, [0, .285, 0], [0, .36, -.004], .029, .027, SKIN);
+  const head = joint(torso, 0, .41, 0), eyes = [];                                          // a face with real structure
+  put3(head, SPH, SKIN, [0, 0, 0], [.06, .072, .066]);
+  put3(head, SPH, SKIN, [0, .012, -.014], [.058, .06, .06]);
+  put3(head, SPH, SKIN, [0, -.032, .01], [.046, .04, .05]);
+  put3(head, SPH, SKIN, [0, -.057, .036], [.02, .015, .018]);
+  bone(head, [0, .006, .062], [0, -.016, .071], .006, .009, SKIN);
+  for (const s of [-1, 1]) {
+    put3(head, SPH, SKIN, [s * .036, -.01, .046], [.02, .016, .016]);                      // cheekbones
+    put3(head, SPH, SKIN, [s * .06, -.006, 0], [.01, .02, .01]);
+    const eye = joint(head, s * .024, .004, .058); eyes.push(eye);
+    put3(eye, SPH, EYE_W, [0, 0, 0], [.013, .009, .005], null, false);
+    put3(eye, SPH, IRIS, [0, -.0005, .004], [.008, .0085, .003], null, false);
+    put3(eye, SPH, PUPIL, [0, -.0005, .006], [.004, .0045, .002], null, false);
+    put3(eye, SPH, 0xffffff, [.003, .003, .007], [.0022, .0022, .0015], null, false);
+    put3(head, SPH, HAIR, [s * .024, .021, .061], [.012, .0028, .003], [0, 0, -s * .12], false);
+    put3(head, SPH, BLUSH, [s * .04, -.02, .051], [.011, .006, .004], null, false);
+  }
+  put3(head, SPH, LIPS, [0, -.034, .058], [.011, .0032, .005], null, false);
+  put3(head, SPH, LIPS, [0, -.04, .056], [.01, .0038, .005], null, false);
+  put3(head, CAP, HAIR, [0, .01, -.006], [.071, .074, .073], [-.35, 0, 0]);
+  let hairBack = null;
+  for (let i = 0; i < 6; i++) {                                                            // the fringe, strand by strand
+    const x = -.04 + i * .016;
+    bone(head, [x * .8, .07, .02], [x + (girl ? .004 : .014), .042, .06], girl ? .011 : .012, .004, HAIR);
+  }
+  if (girl) {
+    hairBack = joint(head, 0, .035, -.035);
+    for (let i = 0; i < 9; i++) {                                                          // long hair in locks that swing
+      const a = -1.1 + i * .275, x = Math.sin(a) * .055, z = -Math.cos(a) * .03;
+      bone(hairBack, [x, .01, z], [x * 1.25, -.26 - .02 * Math.cos(i * 1.7), z - .03], .019, .007, HAIR);
+    }
+    for (const s of [-1, 1]) bone(head, [s * .055, .01, .02], [s * .065, -.16, .035], .016, .006, HAIR);
+    put3(head, SPH, 0xff4f95, [.045, .055, .02], [.02, .013, .01], [0, 0, .5]); put3(head, SPH, 0xff4f95, [.068, .042, .02], [.02, .013, .01], [0, 0, -.5]);
+  } else {
+    for (let i = 0; i < 5; i++) bone(head, [-.04 + i * .02, .074, -.01], [-.05 + i * .025, .06, -.06], .014, .006, HAIR);   // messy back
+    put3(head, SPH, HAIR, [0, -.004, -.034], [.061, .055, .05]);
+    for (const s of [-1, 1]) put3(head, SPH, HAIR, [s * .052, .02, -.01], [.016, .03, .035]);
+  }
+  const leg = (s) => {                                                                     // thigh tapers into the knee, the calf swells
+    const hip = joint(root, s * .048, HIP, 0), knee = joint(hip, 0, -.245, 0), ank = joint(knee, 0, -.235, 0), C = girl ? SKIN : 0x2f4a8a;
+    put3(hip, shape([[0, -.258], [.03, -.25], [.035, -.23], [.042, -.17], [.049, -.09], [.053, -.03], [.05, 0], [.04, .025], [0, .035]]), C, [0, 0, 0]);
+    put3(knee, SPH, C, [0, 0, .004], [.031 * k, .033, .033 * k]);
+    put3(knee, shape([[0, -.245], [.019, -.238], [.021, -.2], [.025, -.15], [.034, -.085], [.038, -.05], [.036, -.015], [.03, .005], [0, .015]]), C, [0, 0, 0]);
+    put3(ank, SPH, girl ? 0xff7fb4 : 0xf6f6f6, [0, -.012, .026], [.029, .022, .064]);      // shoe
+    put3(ank, SPH, girl ? 0xff7fb4 : 0xf6f6f6, [0, -.018, .07], [.026, .016, .026]);       // toe
+    put3(ank, SPH, girl ? 0xd94d8a : 0x8a8f9c, [0, -.031, .036], [.03, .007, .07]);        // sole
+    return { hip, knee, ank };
+  };
+  const arm = (s) => {                                                                     // shoulder, elbow, wrist, fingers
+    const sh = joint(torso, s * .12, .255, 0), el = joint(sh, 0, -.165, 0), wr = joint(el, 0, -.148, 0), C = girl ? SKIN : 0x4f86ff;
+    put3(sh, shape([[0, -.172], [.022, -.165], [.025, -.13], [.029, -.07], [.033, -.025], [.034, 0], [.028, .022], [0, .03]]), C, [0, 0, 0]);
+    put3(el, SPH, C, [0, 0, 0], [.025 * k, .025, .025 * k]);
+    put3(el, shape([[0, -.152], [.014, -.148], [.017, -.13], [.021, -.08], [.026, -.035], [.026, -.01], [.02, .008], [0, .014]]), C, [0, 0, 0]);
+    if (!girl) put3(el, new THREE.TorusGeometry(.019, .006, 6, 16), 0x3d6fe0, [0, -.14, 0], null, [Math.PI / 2, 0, 0]);
+    put3(wr, SPH, SKIN, [0, -.022, .002], [.016, .024, .008]);
+    for (let f = 0; f < 4; f++) bone(wr, [-.009 + f * .006, -.04, .002], [-.01 + f * .0065, -.066 + Math.abs(f - 1.5) * .004, .008], .0042, .0034, SKIN);
+    bone(wr, [-s * .011, -.012, .004], [-s * .02, -.034, .012], .0048, .0038, SKIN);
+    return { sh, el, wr };
+  };
+  const L = leg(-1), R = leg(1), A = arm(-1), B = arm(1);
+  if (girl) root.scale.setScalar(.95);
+  scene.add(root);
+  return { root, torso, head, eyes, hairBack, skirt, hip: HIP * (girl ? .95 : 1), hipL: L.hip, kneeL: L.knee, ankL: L.ank, hipR: R.hip, kneeR: R.knee, ankR: R.ank,
+           shL: A.sh, elL: A.el, wrL: A.wr, shR: B.sh, elR: B.el, wrR: B.wr };
+}
+
+let FURRY = 0;
+function makeDog() {                                     // our tiny fluffy pup: sculpted under real fur
+  const FUR = 0x2a2529, WHITE = 0xf6f2ec, BRN = 0xa0652f;
+  const root = new THREE.Group(), body = joint(root, 0, 0, 0);
+  FURRY = .018;
+  put3(body, lathe([[0, -.2], [.05, -.195], [.075, -.16], [.08, -.1], [.074, -.04], [.078, .03], [.09, .1], [.094, .15], [.08, .19], [.045, .21], [0, .215]], 30), FUR, [0, .245, 0], [1, 1, .92], [0, 0, -Math.PI / 2]);
+  put3(body, SPH, WHITE, [.13, .2, 0], [.06, .07, .062]);
+  put3(body, SPH, WHITE, [0, .175, 0], [.1, .042, .056]);
+  bone(body, [.14, .27, 0], [.21, .35, 0], .06, .05, FUR);
+  put3(body, SPH, WHITE, [.19, .285, 0], [.04, .05, .042]);
+  FURRY = 0;
+  put3(body, new THREE.TorusGeometry(.056, .011, 8, 24), 0xff4f8a, [.16, .29, 0], null, [0, Math.PI / 2, .82]);
+  put3(body, SPH, 0xffd34d, [.19, .265, 0], [.012, .012, .012]);
+  const head = joint(body, .24, .375, 0); head.scale.setScalar(1.25);
+  FURRY = .014;
+  put3(head, SPH, FUR, [0, 0, 0], [.066, .062, .06]);
+  put3(head, SPH, FUR, [-.012, .03, 0], [.05, .03, .045]);                                 // topknot
+  put3(head, SPH, WHITE, [.04, .046, 0], [.03, .018, .016]);                               // white blaze
+  FURRY = .008;
+  bone(head, [.035, -.015, 0], [.09, -.028, 0], .032, .026, WHITE);                        // muzzle
+  for (const s of [-1, 1]) {
+    put3(head, SPH, BRN, [.055, -.022, s * .035], [.025, .022, .02]);                      // brown cheeks
+    put3(head, SPH, BRN, [.04, .03, s * .03], [.016, .01, .012]);                          // brown eyebrows
+  }
+  FURRY = 0;
+  put3(head, SPH, 0x15100f, [.1, -.022, 0], [.016, .013, .018]);
+  const tongue = put3(head, SPH, 0xff7d9a, [.084, -.058, 0], [.016, .022, .013]);
+  const ears = [];
+  for (const s of [-1, 1]) {
+    put3(head, SPH, 0x0c0808, [.054, .012, s * .036], [.015, .016, .011]);
+    put3(head, SPH, 0xffffff, [.064, .019, s * .04], [.005, .005, .004]);
+    const ear = joint(head, -.01, .035, s * .055);
+    FURRY = .03; bone(ear, [0, 0, 0], [.004, -.072, s * .02], .028, .024, FUR, [1, 1, .5]); FURRY = 0;   // long silky ears
+    ears.push(ear);
+  }
+  const tail = joint(body, -.19, .28, 0), tail2 = joint(tail, -.04, .07, 0);
+  FURRY = .032; bone(tail, [0, 0, 0], [-.04, .07, 0], .026, .02, FUR); bone(tail2, [0, 0, 0], [.03, .06, 0], .02, .012, FUR);
+  put3(tail2, SPH, WHITE, [.03, .06, 0], [.02, .02, .02]);                                 // white tip of the plume
+  const legs = [];
+  for (const [x, z, front] of [[.12, .05, 1], [.12, -.05, 1], [-.14, .055, 0], [-.14, -.055, 0]]) {
+    const up = joint(body, x, front ? .22 : .23, z);
+    let low;
+    FURRY = .018;
+    if (front) { bone(up, [0, 0, 0], [0, -.1, 0], .034, .028, FUR); low = joint(up, 0, -.1, 0); FURRY = .01; bone(low, [0, 0, 0], [0, -.1, 0], .025, .021, WHITE); put3(low, SPH, WHITE, [.012, -.11, 0], [.03, .018, .026]); }
+    else { bone(up, [0, 0, 0], [.025, -.1, 0], .05, .034, FUR); low = joint(up, .025, -.1, 0); FURRY = .01; bone(low, [0, 0, 0], [-.025, -.11, 0], .025, .021, WHITE); put3(low, SPH, WHITE, [-.012, -.12, 0], [.03, .018, .026]); }
+    legs.push({ up, low, front });
+  }
+  FURRY = 0;
+  root.scale.setScalar(.72);
+  scene.add(root);
+  return { root, body, head, tail, tail2, legs, ears, tongue };
+}
+
+const HIM = human(false), HER = human(true), DOG = makeDog();
+const BALL = { o: put3(scene, SPH, 0xd8ff5a, [0, -9, 0], [.028, .028, .028]) };
+const DOT_COUNT = dotify(HIM.root, 75000) + dotify(HER.root, 75000) + dotify(DOG.root, 120000) + dotify(BALL.o, 60000);
+const SHADOWS = [[HIM.root, .19, 1], [HER.root, .19, 1], [DOG.root, .14, 1.6], [BALL.o, .04, 1]].map(([obj, r, sx]) => {
+  const m = new THREE.Mesh(new THREE.CircleGeometry(1, 32), new THREE.ShaderMaterial({ transparent: true, depthWrite: false,
+    vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
+    fragmentShader: `varying vec2 vP; void main(){ gl_FragColor = vec4(0., 0., 0., .45 * (1. - smoothstep(.2, 1., length(vP)))); }` }));
+  m.rotation.x = -Math.PI / 2; m.scale.set(r * sx, r, 1); m.renderOrder = -1; scene.add(m);
+  return { m, obj };
+});
+function shadowStep() { for (const s of SHADOWS) { s.m.visible = s.obj.visible; s.m.position.set(s.obj.position.x, Y0 + .004, s.obj.position.z); s.m.rotation.z = s.obj === DOG.root ? DOG.root.rotation.y : 0; } }
+
+// ---- how we move
+const smooth = (p) => p * p * (3 - 2 * p);
+function runPose(K, ph, amp, hold) {                    // a real run: the whole body works together, nothing swings like a lever
+  const s = Math.sin(ph), c = Math.cos(ph);
+  K.torso.rotation.set(.16 * amp, .13 * s * amp, .035 * c * amp);                  // lean in, counter-twist against the legs, a little sway
+  for (const [hip, knee, ank, off] of [[K.hipL, K.kneeL, K.ankL, 0], [K.hipR, K.kneeR, K.ankR, Math.PI]]) {
+    const q = ph + off, hs = Math.sin(q);
+    hip.rotation.set((-.95 * hs + .08) * amp, 0, 0);
+    knee.rotation.set((.18 + 1.45 * Math.pow(Math.max(0, Math.sin(q - 1.3)), 1.2)) * amp, 0, 0);   // folds most as the leg swings through
+    ank.rotation.set(-.38 * Math.sin(q - .5) * amp, 0, 0);                                     // heel strike, roll, push off the toes
+  }
+  for (const [sh, el, wr, sg] of [[K.shL, K.elL, K.wrL, -1], [K.shR, K.elR, K.wrR, 1]]) {
+    if (sg === hold) continue;
+    const q = ph + (sg < 0 ? Math.PI : 0), as = Math.sin(q);
+    sh.rotation.set(-.8 * as * amp, 0, sg * (.1 + .07 * Math.max(0, -as)) * amp);              // from the shoulder...
+    el.rotation.set(-(1.0 + .55 * (as * .5 + .5)) * amp, 0, 0);                                 // ...the elbow folds more coming forward...
+    wr.rotation.set(.28 * Math.sin(q - .8) * amp, 0, 0);                                        // ...and the hand trails behind
+  }
+  K.head.rotation.set(-.14 * amp, -.1 * s * amp, 0);                                           // eyes stay steady on where we're going
+  return (Math.abs(c) * .042 + .006) * amp;
+}
+function holdHands(K, ph, amp, sg) {                    // our joined hands swing together, gently
+  const sh = sg < 0 ? K.shL : K.shR, el = sg < 0 ? K.elL : K.elR, wr = sg < 0 ? K.wrL : K.wrR;
+  sh.rotation.set(.18 * Math.sin(ph) * amp - .05, 0, sg * .1);
+  el.rotation.set(-.3 - .08 * Math.sin(ph) * amp, 0, 0);
+  wr.rotation.set(.1, 0, 0);
+}
+function sitPose(K, k, girl) {                           // sitting in the grass, legs out, leaning on each other
+  const L = (a, b) => lerp(a, b, k);
+  K.torso.rotation.set(L(K.torso.rotation.x, -.1), L(K.torso.rotation.y, 0), L(K.torso.rotation.z, 0));
+  for (const [hp, kn, an, s] of [[K.hipL, K.kneeL, K.ankL, -1], [K.hipR, K.kneeR, K.ankR, 1]]) {
+    hp.rotation.set(L(hp.rotation.x, -1.42), 0, L(hp.rotation.z, s * .06)); kn.rotation.set(L(kn.rotation.x, .28), 0, 0); an.rotation.set(L(an.rotation.x, -.15), 0, 0);
+  }
+  for (const w of [K.wrL, K.wrR]) w.rotation.set(L(w.rotation.x, .2), 0, 0);
+  if (girl) {
+    K.shL.rotation.set(L(K.shL.rotation.x, -.55), 0, L(K.shL.rotation.z, -.12)); K.elL.rotation.set(L(K.elL.rotation.x, -.9), 0, 0);
+    K.shR.rotation.set(L(K.shR.rotation.x, -.55), 0, L(K.shR.rotation.z, .12)); K.elR.rotation.set(L(K.elR.rotation.x, -.9), 0, 0);
+    K.head.rotation.set(L(K.head.rotation.x, .05), 0, L(K.head.rotation.z, .28));       // head on my shoulder
+  } else {
+    K.shR.rotation.set(L(K.shR.rotation.x, .3), 0, L(K.shR.rotation.z, 1.45)); K.elR.rotation.set(L(K.elR.rotation.x, -.25), 0, L(K.elR.rotation.z, -1.35));   // my arm around you, resting on your far shoulder
+    K.shL.rotation.set(L(K.shL.rotation.x, -.35), 0, L(K.shL.rotation.z, -.2)); K.elL.rotation.set(L(K.elL.rotation.x, -.4), 0, 0);
+    K.head.rotation.set(L(K.head.rotation.x, 0), 0, L(K.head.rotation.z, -.08));
+  }
+}
+function dogRun(ph, t) {                                 // a real gallop: front pair, then back pair, back flexing
+  DOG.body.rotation.z = Math.sin(ph) * .07; DOG.body.position.y = Math.abs(Math.sin(ph)) * .03;
+  for (const [i, lg] of DOG.legs.entries()) {
+    const side = (i % 2) * .35;
+    if (lg.front) { lg.up.rotation.z = Math.sin(ph + side) * .7; lg.low.rotation.z = -Math.max(0, -Math.sin(ph + side + .6)) * 1.1; }
+    else { lg.up.rotation.z = Math.sin(ph + side + 2.4) * .62; lg.low.rotation.z = Math.max(0, Math.sin(ph + side + 3.0)) * .9; }
+  }
+  DOG.head.rotation.z = -Math.sin(ph) * .07;
+  DOG.tail.rotation.z = .35 + Math.sin(t * 15) * .35; DOG.tail2.rotation.z = Math.sin(t * 15 - .8) * .4;
+  DOG.ears.forEach((e, i) => { e.rotation.z = .5 + Math.sin(ph + i) * .35; });
+  DOG.tongue.visible = true;
+}
+function dogSit(t) {
+  DOG.body.rotation.z = .5; DOG.body.position.y = -.025;
+  for (const lg of DOG.legs) {
+    if (lg.front) { lg.up.rotation.z = -.5; lg.low.rotation.z = 0; }
+    else { lg.up.rotation.z = 1.05; lg.low.rotation.z = -1.9; }
+  }
+  DOG.head.rotation.z = -.45 + Math.sin(t * 1.7) * .05;
+  DOG.tail.rotation.z = -.6 + Math.sin(t * 9) * .3; DOG.tail2.rotation.z = Math.sin(t * 9 - .8) * .3;
+  DOG.ears.forEach((e) => { e.rotation.z = .1; });
+  DOG.tongue.visible = true;
+}
+function faceTo(dx, dz) { return Math.atan2(-dz, dx); }  // the dog's nose points along +x
+
+// ---- the story
+const SIT_HIM = [-.6, .5], SIT_HER = [-.33, .52], SIT_DOG = [.1, .68], FAR = [.88, .74];
+const T_WALK = 28, T_SIT = 35, T_FETCH = 36.8;
+const handPos = new THREE.Vector3(), mouth = new THREE.Vector3(), tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+function throwArm(u) {                                   // overhand: wind up, whip it over my head, follow through
+  const K = [[0, -.2], [.2, -.2], [.45, -2.6], [.7, -3.75], [1.25, -.2], [6, -.2]];
+  for (let i = 1; i < K.length; i++) if (u <= K[i][0]) return lerp(K[i - 1][1], K[i][1], smooth((u - K[i - 1][0]) / (K[i][0] - K[i - 1][0])));
+  return -.2;
+}
+function along(e, start) {                               // ease into the run, keep going, slow to a stop at the tree
+  const t = clamp((e - T_WALK) / (T_SIT - .3 - T_WALK), 0, 1);
+  return { x: lerp(start, SIT_HIM[0], t - Math.sin(2 * Math.PI * t) / (2 * Math.PI)), speed: Math.min(1, (1 - Math.cos(2 * Math.PI * t)) * .8 + (t > 0 && t < 1 ? .15 : 0)) };
+}
+function lifeStep(t) {                                   // blinking and breathing, so we're never frozen
+  for (const [K, off] of [[HIM, 0], [HER, 1.7]]) {
+    const b = (t + off) % 4.3, shut = b < .13 ? Math.sin(b / .13 * Math.PI) : 0;
+    for (const e of K.eyes) e.scale.y = 1 - .92 * shut;
+    K.torso.scale.set(1, 1 + Math.sin(t * 1.6 + off) * .012, 1 + Math.sin(t * 1.6 + off) * .01);
+  }
+}
+let release = null, cycle = -1;
+function storyStep(e, t) {
+  lifeStep(t);
+  const on = e >= T_WALK - .2;
+  HIM.root.visible = HER.root.visible = DOG.root.visible = BALL.o.visible = on;
+  if (!on) return;
+  const wide = innerWidth / innerHeight >= 1, start = wide ? -6.6 : -2.3;
+  const sit = smooth(clamp((e - T_SIT) / 1.0, 0, 1));
+  const run = along(e, start), hx = run.x, amp = run.speed * (1 - sit), ph = e * 9.5;
+  const yaw = 1.0;                                       // running to the right, three-quarters toward you
+  const off = [-.3 * Math.cos(yaw), .3 * Math.sin(yaw)]; // you run on my left, the side closest to the camera
+  // me
+  let bob = runPose(HIM, ph, amp, -1); holdHands(HIM, ph, amp, -1);
+  HIM.root.position.set(hx, Y0 + bob - (HIM.hip - .07) * sit, lerp(SIT_HIM[1] - .02, SIT_HIM[1], sit));
+  HIM.root.rotation.set(0, lerp(yaw, .12, sit), 0);
+  // you, in step with me, holding my hand the whole way
+  bob = runPose(HER, ph + .25, amp, 1); holdHands(HER, ph + .25, amp, 1);
+  const runX = hx + off[0], runZ = SIT_HIM[1] + off[1];
+  HER.root.position.set(lerp(runX, SIT_HER[0], sit), Y0 + bob - (HER.hip - .07) * sit, lerp(runZ, SIT_HER[1], sit));
+  HER.root.rotation.set(0, lerp(yaw, -.12, sit), .13 * sit);
+  HER.skirt.scale.set(1 + .06 * amp * Math.abs(Math.sin(ph)), 1, 1 + .06 * amp * Math.abs(Math.sin(ph)));
+  HER.hairBack.rotation.x = -(.3 + .14 * Math.sin(ph * 2 - .8)) * amp;              // her hair streams behind her
+  sitPose(HIM, sit, false); sitPose(HER, sit, true);
+  if (sit > .01) HER.hairBack.rotation.x = lerp(HER.hairBack.rotation.x, .05, sit);
+
+  // the dog: racing circles around us while we run, then flopping down beside us
+  if (e < T_FETCH) {
+    const cx = (hx + runX) / 2 + .1, cz = (SIT_HIM[1] + runZ) / 2, th = e * 2.5;
+    let x = cx + Math.cos(th) * .72, z = cz + Math.sin(th) * .42;
+    let face = faceTo(-Math.sin(th) * .72, Math.cos(th) * .42);
+    const settle = smooth(clamp((e - (T_SIT - 1.3)) / 1.3, 0, 1));
+    x = lerp(x, SIT_DOG[0], settle); z = lerp(z, SIT_DOG[1], settle);
+    const sitD = smooth(clamp((e - T_SIT - .2) / .6, 0, 1));
+    face = settle > .99 ? Math.PI + .7 : face;
+    DOG.root.position.set(x, Y0, z); DOG.root.rotation.set(0, face, 0);
+    if (sitD > .5) dogSit(t); else dogRun(e * 15, t);
+    HIM.root.updateMatrixWorld(true); HIM.elL.localToWorld(handPos.set(0, -.18, 0));
+    BALL.o.position.copy(handPos);
+    return;
+  }
+  // fetch, forever: throw -> the ball flies -> he runs it down -> brings it back -> drops it -> again
+  const u = (e - T_FETCH) % 6, c = Math.floor((e - T_FETCH) / 6);
+  HIM.shL.rotation.z = throwArm(u); HIM.elL.rotation.x = u > .2 && u < 1.2 ? -.15 : -.4;
+  HIM.root.updateMatrixWorld(true); HIM.elL.localToWorld(handPos.set(0, -.18, 0));
+  if (c !== cycle) { cycle = c; release = null; }
+  const gy = Y0 + .036;
+  if (u < .7) BALL.o.position.copy(handPos);
+  else if (u < 2.0) {
+    if (!release) release = handPos.clone();
+    const q = (u - .7) / 1.3;
+    BALL.o.position.set(lerp(release.x, FAR[0], q), lerp(release.y, gy, q) + 2.6 * q * (1 - q), lerp(release.z, FAR[1], q));
+  } else if (u < 2.45) BALL.o.position.set(FAR[0], gy + Math.abs(Math.sin((u - 2) * Math.PI / .45)) * .08 * (2.45 - u), FAR[1]);
+  if (u >= .75 && u < 2.45) {
+    const q = smooth((u - .75) / 1.7);
+    DOG.root.position.set(lerp(SIT_DOG[0], FAR[0] - .3, q), Y0, lerp(SIT_DOG[1], FAR[1], q));
+    DOG.root.rotation.set(0, faceTo(FAR[0] - SIT_DOG[0], FAR[1] - SIT_DOG[1]), 0); dogRun(e * 16, t);
+  } else if (u >= 2.45 && u < 4.3) {
+    const q = smooth((u - 2.45) / 1.85);
+    DOG.root.position.set(lerp(FAR[0] - .3, SIT_DOG[0], q), Y0, lerp(FAR[1], SIT_DOG[1], q));
+    DOG.root.rotation.set(0, faceTo(SIT_DOG[0] - FAR[0], SIT_DOG[1] - FAR[1]), 0); dogRun(e * 16, t);
+    DOG.tongue.visible = false;                          // mouth's full
+    DOG.root.updateMatrixWorld(true); DOG.head.localToWorld(mouth.set(.1, -.048, 0)); BALL.o.position.copy(mouth);
+  } else {
+    DOG.root.position.set(SIT_DOG[0], Y0, SIT_DOG[1]); DOG.root.rotation.set(0, Math.PI + .7, 0); dogSit(t);
+    const drop = [SIT_DOG[0] - .24, gy, SIT_DOG[1] + .1];
+    if (u >= 4.3 && u < 4.8) BALL.o.position.set(drop[0], drop[1], drop[2]);
+    else if (u >= 4.8) { const q = smooth(clamp((u - 4.8) / .8, 0, 1)); BALL.o.position.set(lerp(drop[0], handPos.x, q), lerp(drop[1], handPos.y, q) + .15 * Math.sin(q * Math.PI), lerp(drop[2], handPos.z, q)); }
+  }
+}
+
+// ---------------------------------------------------------------- cinematic camera (the bloom's, extended)
+// [t, camera x,y,z, look-at x,y,z]. The first part is the HP bloom's camera exactly; then it folds back out
+// to watch the tree grow and settles on the three of us. Phones get pulled back so everyone fits.
+let KEYS = [];
+function buildKeys() {
+  const asp = innerWidth / innerHeight, m = asp < 1 ? Math.max(1, .9 / asp) : 1.0;
+  const LX = asp >= 1 ? -1.35 : 0, LY = asp < 1 ? .4 : -.4;
+  const CX = asp >= 1 ? -.75 : -.04, CY = asp >= 1 ? -.3 : -.5, CD = asp >= 1 ? 4.8 : Math.max(4, 1.05 / (.325 * asp));   // the close shot
+  KEYS = [
+    [0.0,   0.00,  0.95, 5.60,   0.00,  0.95, 0.0],
+    [2.6,   0.06,  0.50, 5.55,   0.00,  0.46, 0.0],
+    [5.2,   0.20,  0.40, 5.10,   0.00,  0.38, 0.0],
+    [8.2,   0.26, -0.36, 1.45,   0.02, -0.30, 0.0],
+    [10.1,  0.34, -0.30, 0.16,   0.08,  0.05, 0.0],
+    [11.9,  0.62,  0.42, 0.62,   0.00,  0.42, 0.0],
+    [13.8,  0.18,  2.05, 0.30,   0.00,  0.34, 0.0],
+    [15.6,  1.05,  1.25, 3.40,   0.00,  0.05, 0.0],
+    [17.2,  0.00,  0.12, 5.30,   0.00, -0.08, 0.0],                  // the whole flower in front of you -- and it starts to change
+    [20.6,  0.6 + LX, 0.9, 7.0 * m,   LX, 0.45 + LY, 0.0],           // fold out as the tree rises out of the light
+    [24.5, -0.9 + LX, 1.6, 7.8 * m,   LX, 0.75 + LY, 0.0],           // drift around it while it blossoms
+    [31.0,  0.4 + LX, 1.0, 7.6 * m,   LX, 0.70 + LY, 0.0],           // here we come
+    [36.0,  0.0 + LX, 0.8, 7.2 * m,   LX, 0.62 + LY, 0.0],           // we sit down under it
+    [41.0,  CX + .25, CY + .3, .5 + CD, CX, CY, .5],                 // ...and the camera comes in close on us
+    [70.0,  CX - .2, CY + .38, .5 + CD * 1.05, CX, CY, .5],
+  ];
+}
+function camShot(e) {
+  e = clamp(e, KEYS[0][0], KEYS[KEYS.length - 1][0]);
+  let k = 0; while (k < KEYS.length - 2 && e > KEYS[k + 1][0]) k++;
+  const P0 = KEYS[k], P1 = KEYS[k + 1], h = P1[0] - P0[0], s = (e - P0[0]) / h;
+  const tan = (i, j) => { if (i === 0 || i === KEYS.length - 1) return 0; return (KEYS[i + 1][j] - KEYS[i - 1][j]) / (KEYS[i + 1][0] - KEYS[i - 1][0]); };
+  const s2 = s * s, s3 = s2 * s, h00 = 2 * s3 - 3 * s2 + 1, h10 = s3 - 2 * s2 + s, h01 = -2 * s3 + 3 * s2, h11 = s3 - s2;
+  const v = j => h00 * P0[j] + h10 * h * tan(k, j) + h01 * P1[j] + h11 * h * tan(k + 1, j);
+  cam.position.set(v(1), v(2), v(3)); cam.up.set(0, 1, 0); cam.lookAt(v(4), v(5), v(6));
+}
+addEventListener('resize', resize); resize();
+
+// ---------------------------------------------------------------- timeline
+// seed 0.3-2.3 -> grass 2.4-5.8 -> stem 3-12 -> bloom 11-15 (all exactly the HP's) -> the flower flows into
+// a tree 17.4-29 -> meadow spreads -> we run in hand in hand 28-35 -> sit -> fetch from 36.8, forever.
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const letter = [...document.querySelectorAll('#letter p')];
+let t0 = 0, started = false;
+function frame(now) {
+  requestAnimationFrame(frame);
+  if (!started) return;
+  const FZ = QP.has('freeze') ? +QP.get('freeze') : null;
+  const e = FZ !== null ? FZ : (now - t0) / 1000, t = now / 1000;
+  U.uT.value = t; U.uFade.value = clamp(e / .8, 0, 1);
+  U.uGr.value = ease(clamp((e - 2.4) / 3.4, 0, 1)) * (1 - .6 * MEADOW.value);   // the flower's tuft settles into the lawn
+  U.uG.value = ease(clamp((e - 3.0) / 9.0, 0, 1));
+  U.uO.value = ease(clamp((e - 11.0) / 4.0, 0, 1));
+  seedStep(e);
+  U.uB.value = 0;                                                    // no burst: the flower turns into the tree
+  U.uM.value = ease(clamp((e - 17.4) / 11.5, 0, 1));
+  MEADOW.value = ease(clamp((e - 18.5) / 4, 0, 1));
+  PETALS.uniforms.uA.value = clamp((e - 25) / 3, 0, 1);
+  FLIES.uniforms.uA.value = clamp((e - 22) / 3, 0, 1);
+  storyStep(e, t); shadowStep();
+  camShot(e);
+  for (const p of letter) p.classList.toggle('on', e >= +p.dataset.at);
+  document.getElementById('controls').classList.toggle('on', e > 48.5);
+  Rr.render(scene, cam);
+}
+requestAnimationFrame(frame);
+
+function begin() { t0 = performance.now() - (reduce ? 49000 : 0); started = true; cycle = -1; }
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function paint(row) {
+  const cut = row.indexOf('// ');
+  const code = cut >= 0 ? row.slice(0, cut) : row, note = cut >= 0 ? row.slice(cut) : '';
+  const tokens = /('[^']*')|\b(const|let|function|return|for|if|of|else|new)\b|\b(\d+\.?\d*)\b/g;
+  return esc(code).replace(tokens, (m, s, k, n) =>
+    s ? '<span class="s">' + s + '</span>' : k ? '<span class="k">' + k + '</span>' : '<span class="n">' + n + '</span>')
+    + (note ? '<span class="c">' + esc(note) + '</span>' : '');
+}
+// ---- the opening: her tap unlocks the sound, the code streams by, "I love you" types itself out letter by letter,
+// and the instant the last letter lands, our song starts and it all dissolves into the story.
+const song = new Audio('https://for-giana.netlify.app/phone-call.mp3');                // "Phone Call" -- Jon Brion
+song.preload = 'auto'; song.loop = true; song.setAttribute('playsinline', '');
+let opened = false;
+function unlockSound() {                                 // phones only allow sound a tap started: start and stop it in the same instant,
+  try {                                                  // which unlocks it without making a sound
+    song.muted = true; song.volume = 0;
+    const p = song.play(); song.pause(); song.currentTime = 0;
+    if (p && p.catch) p.catch(() => { });
+  } catch (e) { }
+  setTimeout(() => { if (!songOn) { song.pause(); song.currentTime = 0; } }, 60);   // and make sure it stays quiet until its moment
+}
+let songOn = false;
+function playSong() { songOn = true; try { song.currentTime = 0; song.muted = false; song.volume = 1; const p = song.play(); if (p && p.catch) p.catch(() => { }); } catch (e) { } }
+const term = document.getElementById('term'), wait = (ms) => new Promise((r) => setTimeout(r, ms));
+function stream(lines, perFrame) {
+  return new Promise((done) => {
+    let i = 0, acc = 0;
+    (function step() {
+      acc += perFrame; let html = '';
+      while (acc >= 1 && i < lines.length) { html += paint(lines[i++]) + '\n'; acc -= 1; }
+      if (html) { term.insertAdjacentHTML('beforeend', html); term.scrollTop = term.scrollHeight; }
+      i < lines.length ? requestAnimationFrame(step) : done();
+    })();
+  });
+}
+async function open() {
+  if (opened) return; opened = true;
+  document.getElementById('begin').style.visibility = 'hidden';
+  term.innerHTML = '';
+  await stream(document.getElementById('app').textContent.replace(/^\n/, '').split('\n'), reduce ? 80 : 7);
+  for (const [txt, tag] of [['$ node giana.js', ''], ['  planting a seed .......... ', 'ok'], ['  growing a flower ......... ', 'ok'], ['  growing it into a tree ... ', 'ok'], ['  finding the pup .......... ', 'ok'], ['  loading feelings ......... ', 'overflow']]) {
+    await wait(reduce ? 0 : 230);
+    term.insertAdjacentHTML('beforeend', '\n' + esc(txt) + (tag ? '<span class="' + (tag === 'overflow' ? 'warn' : 'ok') + '">' + tag + '</span>' : ''));
+    term.scrollTop = term.scrollHeight;
+  }
+  await wait(reduce ? 0 : 1000);
+  term.classList.add('love'); term.innerHTML = '<span class="typed"><span id="ty"></span><span class="cursor"></span></span>';
+  await wait(reduce ? 0 : 700);
+  const ty = document.getElementById('ty');
+  for (const ch of 'I love you') { ty.textContent += ch; await wait(reduce ? 0 : ch === ' ' ? 420 : 340); }
+  playSong();                                            // the second the last letter lands
+  await wait(reduce ? 0 : 2400);
+  begin();                                               // ...and the story fades up underneath
+  document.getElementById('intro').classList.add('gone');
+  setTimeout(() => { document.getElementById('intro').hidden = true; }, 3300);
+}
+document.getElementById('begin').addEventListener('click', () => { unlockSound(); open(); });
+document.getElementById('replay').addEventListener('click', begin);
+document.getElementById('viewsrc').addEventListener('click', () => {
+  const pre = document.getElementById('srcpre');
+  if (!pre.innerHTML) pre.innerHTML = document.getElementById('app').textContent.replace(/^\n/, '').split('\n').map(paint).join('\n');
+  document.getElementById('source').hidden = false;
+});
+document.getElementById('closesrc').addEventListener('click', () => { document.getElementById('source').hidden = true; });
+if (QP.has('freeze')) begin();
+</script>
+
+</body>
+</html>
